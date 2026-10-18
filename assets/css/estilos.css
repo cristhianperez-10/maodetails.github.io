@@ -1,0 +1,58 @@
+/* Mao details · estilos de marca */
+@font-face { font-family: "Cormorant"; src: url("../fonts/CG-SemiBold.woff2") format("woff2"); font-weight: 600; font-display: swap; }
+@font-face { font-family: "Cormorant"; src: url("../fonts/CG-MediumItalic.woff2") format("woff2"); font-weight: 500; font-style: italic; font-display: swap; }
+@font-face { font-family: "Montserrat"; src: url("../fonts/MS-Regular.woff2") format("woff2"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "Montserrat"; src: url("../fonts/MS-Medium.woff2") format("woff2"); font-weight: 500; font-display: swap; }
+@font-face { font-family: "Montserrat"; src: url("../fonts/MS-SemiBold.woff2") format("woff2"); font-weight: 600; font-display: swap; }
+@font-face { font-family: "GreatVibes"; src: url("../fonts/GV-Regular.woff2") format("woff2"); font-display: swap; }
+
+:root {
+  --vino: #6B1E2E; --vino-osc: #4A1420; --dorado: #C9A35C; --dorado-cl: #E3C98F;
+  --rosa: #E8C5C1; --rosa-viejo: #B76E79; --marfil: #F7F1EA; --carbon: #2B2326; --blanco: #FFFFFF;
+  --serif: "Cormorant", Georgia, "Times New Roman", serif;
+  --sans: "Montserrat", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --script: "GreatVibes", cursive;
+  --ancho: 1080px;
+  --radio: 2px;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; font-family: var(--sans); color: var(--carbon); background: var(--marfil); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+img { max-width: 100%; height: auto; display: block; }
+a { color: inherit; }
+.contenedor { width: min(var(--ancho), 100% - 32px); margin-inline: auto; }
+
+/* Tipografía */
+.sobretitulo { font: 600 .75rem/1.4 var(--sans); letter-spacing: .32em; text-transform: uppercase; color: var(--dorado); margin: 0 0 12px; }
+h1, h2, h3 { font-family: var(--serif); font-weight: 600; color: var(--vino); line-height: 1.08; margin: 0 0 16px; }
+h1 { font-size: clamp(2.6rem, 7vw, 4.6rem); }
+h2 { font-size: clamp(2rem, 5vw, 3rem); }
+h3 { font-size: 1.6rem; }
+em, .italica { font-family: var(--serif); font-style: italic; font-weight: 500; }
+.dorado { color: var(--dorado); }
+.script { font-family: var(--script); font-weight: 400; }
+
+/* Botones */
+.boton { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 52px; padding: 0 28px; border-radius: 999px;
+  font: 600 .82rem/1 var(--sans); letter-spacing: .2em; text-transform: uppercase; text-decoration: none; border: 2px solid transparent; cursor: pointer; transition: transform .15s, background .2s; }
+.boton:active { transform: scale(.97); }
+.boton-dorado { background: var(--dorado); color: var(--vino-osc); }
+.boton-dorado:hover { background: var(--dorado-cl); }
+.boton-vino { background: var(--vino); color: var(--marfil); }
+.boton-vino:hover { background: var(--vino-osc); }
+.boton-borde { border-color: currentColor; background: transparent; }
+.boton[hidden] { display: none; }
+
+/* Marco doble de la marca */
+.marco { position: relative; border: 2px solid var(--dorado); padding: 6px; }
+.marco::before { content: ""; position: absolute; inset: 6px; border: 1px solid var(--dorado); pointer-events: none; }
+.destello { width: 22px; height: 22px; display: inline-block; background: var(--dorado);
+  clip-path: path("M11 0 Q13.4 8.6 22 11 Q13.4 13.4 11 22 Q8.6 13.4 0 11 Q8.6 8.6 11 0Z"); }
+
+/* Patrón de fondo */
+.patron-vino { background-color: var(--vino);
+  background-image: radial-gradient(circle at 50% 50%, rgba(201,163,92,.16) 2px, transparent 2.5px);
+  background-size: 34px 34px; }
+
+:focus-visible { outline: 3px solid var(--dorado); outline-offset: 3px; }
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }

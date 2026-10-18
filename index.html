@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mao details · Recuerdos que cobran vida</title>
+<meta name="description" content="Cajas de regalo en Bogotá con tu foto impresa que, al escanearla con el celular, reproduce el video de ese momento. Realidad aumentada sin descargar apps.">
+<meta property="og:title" content="Mao details · Recuerdos que cobran vida">
+<meta property="og:description" content="Cajas de regalo con foto + video en realidad aumentada. Bogotá.">
+<meta property="og:image" content="assets/img/caja-mockup.png">
+<meta name="theme-color" content="#6B1E2E">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="assets/img/favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="assets/img/icono-192.png">
+<link rel="stylesheet" href="assets/css/estilos.css">
+<style>
+  /* Encabezado */
+  .encabezado { position: sticky; top: 0; z-index: 10; background: var(--vino); border-bottom: 1px solid rgba(201,163,92,.35); }
+  .encabezado .contenedor { display: flex; align-items: center; justify-content: space-between; min-height: 68px; gap: 16px; }
+  .encabezado img { height: 42px; width: auto; }
+  .encabezado nav { display: flex; align-items: center; gap: 24px; }
+  .encabezado nav a.enlace { color: var(--marfil); text-decoration: none; font-size: .78rem; letter-spacing: .18em; text-transform: uppercase; }
+  .encabezado nav a.enlace:hover { color: var(--dorado-cl); }
+  .encabezado .boton { min-height: 42px; padding: 0 20px; font-size: .72rem; }
+  @media (max-width: 760px) { .encabezado nav a.enlace { display: none; } }
+
+  /* Portada */
+  .heroe { color: var(--marfil); padding: 64px 0 72px; overflow: hidden; }
+  .heroe .contenedor { display: grid; grid-template-columns: 1.05fr 1fr; align-items: center; gap: 40px; }
+  .heroe h1 { color: var(--marfil); }
+  .heroe h1 em { color: var(--dorado); display: block; }
+  .heroe p.lead { font-size: 1.08rem; max-width: 34ch; color: var(--rosa); margin: 0 0 28px; }
+  .heroe .acciones { display: flex; flex-wrap: wrap; gap: 12px; }
+  .heroe .acciones .boton-borde { color: var(--marfil); }
+  .heroe .sellos { display: flex; gap: 18px; flex-wrap: wrap; margin-top: 28px; font-size: .78rem; letter-spacing: .14em; text-transform: uppercase; color: var(--dorado-cl); }
+  .heroe .sellos span::before { content: "✦ "; color: var(--dorado); }
+  .heroe .imagen { position: relative; }
+  .heroe .imagen img { width: 100%; filter: drop-shadow(0 30px 40px rgba(0,0,0,.35)); animation: flotar 6s ease-in-out infinite; }
+  @keyframes flotar { 50% { transform: translateY(-10px); } }
+  @media (max-width: 860px) { .heroe .contenedor { grid-template-columns: 1fr; text-align: center; } .heroe p.lead { margin-inline: auto; } .heroe .acciones, .heroe .sellos { justify-content: center; } .heroe .imagen { max-width: 440px; margin: 0 auto; } }
+
+  section.bloque { padding: 88px 0; }
+  .titulo-seccion { text-align: center; max-width: 640px; margin: 0 auto 48px; }
+
+  /* Pasos */
+  .pasos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; counter-reset: paso; }
+  .paso { background: var(--blanco); padding: 32px 26px; text-align: center; border: 1px solid #eadfd3; position: relative; }
+  .paso::before { counter-increment: paso; content: counter(paso); position: absolute; top: -18px; left: 50%; transform: translateX(-50%); width: 36px; height: 36px; border-radius: 50%;
+    background: var(--vino); color: var(--marfil); font: 600 .95rem/36px var(--sans); }
+  .paso svg { width: 64px; height: 64px; margin: 10px auto 14px; color: var(--vino); }
+  .paso h3 { font-size: 1.55rem; margin-bottom: 6px; }
+  .paso p { margin: 0; font-size: .95rem; }
+  @media (max-width: 760px) { .pasos { grid-template-columns: 1fr; gap: 32px; } }
+
+  /* Demo */
+  .demo { background: var(--rosa); }
+  .demo .contenedor { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
+  .demo .foto { background: var(--marfil); padding: 14px; border: 3px solid var(--dorado); box-shadow: 0 0 0 10px var(--vino), 0 20px 40px rgba(74,20,32,.25); max-width: 420px; margin: 0 auto; }
+  .demo ol { padding-left: 1.2em; margin: 0 0 24px; }
+  .demo li { margin-bottom: 8px; }
+  @media (max-width: 860px) { .demo .contenedor { grid-template-columns: 1fr; } }
+
+  /* Incluye */
+  .incluye { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+  .item { background: var(--blanco); padding: 24px; border-left: 3px solid var(--dorado); }
+  .item strong { display: block; color: var(--vino); margin-bottom: 4px; }
+  .item span { font-size: .9rem; }
+
+  /* Ocasiones */
+  .ocasiones { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; max-width: 820px; margin: 0 auto; }
+  .ocasiones span { background: var(--blanco); border: 1px solid var(--rosa); padding: 12px 20px; border-radius: 999px; color: var(--vino); font-weight: 500; }
+  .ocasiones span::before { content: "✦ "; color: var(--dorado); }
+
+  /* Pedir */
+  .pedir { color: var(--marfil); text-align: center; }
+  .pedir h2 { color: var(--marfil); }
+  .pedir h2 em { color: var(--dorado); }
+  .pedir ol { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin: 40px 0; text-align: left; }
+  .pedir li { border: 1px solid rgba(201,163,92,.5); padding: 22px; }
+  .pedir li b { display: block; font-family: var(--serif); font-size: 2rem; color: var(--dorado); line-height: 1; margin-bottom: 8px; }
+  .pedir li span { color: var(--rosa); font-size: .92rem; }
+  .pedir .acciones { display: flex; justify-content: center; flex-wrap: wrap; gap: 12px; }
+  .pedir .acciones .boton-borde { color: var(--marfil); }
+  .pedir .aviso { margin-top: 20px; color: var(--dorado-cl); font-size: .9rem; }
+  @media (max-width: 860px) { .pedir ol { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 520px) { .pedir ol { grid-template-columns: 1fr; } }
+
+  /* Preguntas */
+  .faq { max-width: 760px; margin: 0 auto; }
+  .faq details { background: var(--blanco); border: 1px solid #eadfd3; margin-bottom: 10px; }
+  .faq summary { cursor: pointer; padding: 18px 22px; font-weight: 600; color: var(--vino); list-style: none; display: flex; justify-content: space-between; gap: 12px; }
+  .faq summary::after { content: "+"; color: var(--dorado); font-size: 1.4rem; line-height: 1; }
+  .faq details[open] summary::after { content: "–"; }
+  .faq details p { margin: 0; padding: 0 22px 20px; }
+
+  footer { background: var(--vino-osc); color: var(--rosa); padding: 48px 0; text-align: center; font-size: .85rem; }
+  footer img { height: 46px; width: auto; margin: 0 auto 14px; }
+  footer .script { font-size: 1.8rem; color: var(--dorado); }
+</style>
+</head>
+<body>
+
+<header class="encabezado">
+  <div class="contenedor">
+    <a href="#inicio" aria-label="Mao details, inicio"><img src="assets/img/logo-horizontal-negativo.svg" alt="Mao details"></a>
+    <nav>
+      <a class="enlace" href="#como-funciona">Cómo funciona</a>
+      <a class="enlace" href="#demo">Pruébalo</a>
+      <a class="enlace" href="#preguntas">Preguntas</a>
+      <a class="boton boton-dorado js-pedir" href="#pedir">Pedir</a>
+    </nav>
+  </div>
+</header>
+
+<main id="inicio">
+  <section class="heroe patron-vino">
+    <div class="contenedor">
+      <div>
+        <p class="sobretitulo">Cajas de regalo · <span class="js-ciudad">Bogotá</span></p>
+        <h1>Un regalo que <em>se mueve</em></h1>
+        <p class="lead">Tu foto impresa en una caja que, al escanearla con el celular, reproduce el video de ese momento. Sin descargar apps.</p>
+        <div class="acciones">
+          <a class="boton boton-dorado js-pedir" href="#pedir">Quiero mi caja</a>
+          <a class="boton boton-borde" href="#demo">Probar la magia</a>
+        </div>
+        <div class="sellos"><span>Hecho a mano</span><span>Android y iPhone</span><span>Entregas en la ciudad</span></div>
+      </div>
+      <div class="imagen"><img src="assets/img/caja-mockup.png" alt="Caja Mao details con una foto en la tapa"></div>
+    </div>
+  </section>
+
+  <section class="bloque" id="como-funciona">
+    <div class="contenedor">
+      <div class="titulo-seccion">
+        <p class="sobretitulo">Cómo funciona</p>
+        <h2>Tres pasos y el recuerdo <em>vuelve</em></h2>
+      </div>
+      <div class="pasos">
+        <div class="paso">
+          <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><rect x="18" y="4" width="28" height="56" rx="5"/><rect x="24" y="20" width="7" height="7"/><rect x="33" y="20" width="7" height="7"/><rect x="24" y="29" width="7" height="7"/><rect x="34" y="30" width="5" height="5" fill="currentColor"/></svg>
+          <h3>Escanea el QR</h3><p>Está en el borde de la tapa. Se abre con la cámara del celular.</p>
+        </div>
+        <div class="paso">
+          <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><rect x="4" y="8" width="36" height="36" stroke="#C9A35C"/><rect x="10" y="14" width="24" height="24" fill="#E8C5C1" stroke="none"/><rect x="34" y="24" width="22" height="36" rx="4" fill="#F7F1EA"/><circle cx="45" cy="40" r="5"/></svg>
+          <h3>Apunta a la foto</h3><p>Mantén el celular quieto sobre la foto de la tapa.</p>
+        </div>
+        <div class="paso">
+          <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><circle cx="30" cy="34" r="24"/><path d="M24 22 L42 34 L24 46Z" fill="currentColor"/><path d="M52 4 Q53.5 9.5 59 11 Q53.5 12.5 52 18 Q50.5 12.5 45 11 Q50.5 9.5 52 4Z" fill="#C9A35C" stroke="none"/></svg>
+          <h3>Mira y escucha</h3><p>Sube el volumen: la foto se convierte en el video de ese momento.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bloque demo" id="demo">
+    <div class="contenedor">
+      <div>
+        <p class="sobretitulo" style="color:var(--vino)">Pruébalo ahora</p>
+        <h2>Mira la magia <em>en 20 segundos</em></h2>
+        <ol>
+          <li>Abre esta página en el computador, o imprime la foto de al lado.</li>
+          <li>Con el celular, escanea el QR o toca <b>Abrir demo</b>.</li>
+          <li>Apunta la cámara del celular a la foto.</li>
+        </ol>
+        <div class="acciones" style="display:flex;gap:12px;flex-wrap:wrap;align-items:center">
+          <a class="boton boton-vino" href="ver.html?p=demo">Abrir demo</a>
+          <div id="qr-demo" aria-label="Código QR de la demo" style="background:#fff;padding:8px;line-height:0"></div>
+        </div>
+      </div>
+      <div class="foto"><img src="pedidos/demo/foto.png" alt="Foto de demostración: dos siluetas frente a un atardecer con confeti" width="1080" height="1080"></div>
+    </div>
+  </section>
+
+  <section class="bloque">
+    <div class="contenedor">
+      <div class="titulo-seccion">
+        <p class="sobretitulo">Qué incluye</p>
+        <h2>Tu caja <em>Mao</em></h2>
+      </div>
+      <div class="incluye">
+        <div class="item"><strong>Caja de marca</strong><span>20 × 20 × 10 cm, tapa vino y base marfil, cierre con sello.</span></div>
+        <div class="item"><strong>Tu foto impresa</strong><span>12 × 12 cm, en papel fotográfico mate.</span></div>
+        <div class="item"><strong>Video en realidad aumentada</strong><span>Aparece sobre la foto al escanearla.</span></div>
+        <div class="item"><strong>Tarjeta y dedicatoria</strong><span>Con las instrucciones y espacio "Para / De".</span></div>
+        <div class="item"><strong>Un detalle a tu elección</strong><span>Flores, chocolates, peluche o carta.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bloque" style="padding-top:0">
+    <div class="contenedor">
+      <div class="titulo-seccion">
+        <p class="sobretitulo">Ideal para</p>
+        <h2>Cada fecha tiene <em>su recuerdo</em></h2>
+      </div>
+      <div class="ocasiones">
+        <span>Aniversarios</span><span>Cumpleaños</span><span>Grados</span><span>Día de la Madre</span><span>Amor y Amistad</span><span>Navidad</span><span>Pedidas de mano</span><span>Mascotas que extrañas</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="bloque pedir patron-vino" id="pedir">
+    <div class="contenedor">
+      <p class="sobretitulo">Cómo pedir</p>
+      <h2>Tu caja en <em>cuatro pasos</em></h2>
+      <ol>
+        <li><b>1</b>Escríbenos<br><span>Cuéntanos la ocasión y la fecha.</span></li>
+        <li><b>2</b>Envía foto y video<br><span>Un video de hasta 30 segundos.</span></li>
+        <li><b>3</b>Elige tu detalle<br><span>Y separa tu caja con el 50 %.</span></li>
+        <li><b>4</b>Recíbela<br><span>Entrega en <span class="js-ciudad">Bogotá</span> o punto acordado.</span></li>
+      </ol>
+      <div class="acciones">
+        <a class="boton boton-dorado" id="btn-whatsapp" href="#" target="_blank" rel="noopener" hidden>Pedir por WhatsApp</a>
+        <a class="boton boton-borde" id="btn-instagram" href="#" target="_blank" rel="noopener">Escríbenos en Instagram</a>
+      </div>
+      <p class="aviso">Pedidos de Navidad hasta el <span class="js-limite">15 de diciembre</span>.</p>
+    </div>
+  </section>
+
+  <section class="bloque" id="preguntas">
+    <div class="contenedor">
+      <div class="titulo-seccion">
+        <p class="sobretitulo">Preguntas frecuentes</p>
+        <h2>Todo lo que <em>quieres saber</em></h2>
+      </div>
+      <div class="faq">
+        <details><summary>¿Hay que descargar alguna aplicación?</summary><p>No. Se abre en el navegador del celular al escanear el QR. Funciona en Android y en iPhone.</p></details>
+        <details><summary>¿Qué video sirve mejor?</summary><p>Un video de hasta 30 segundos, grabado de forma horizontal o cuadrada y con buena luz. Si tiene audio, también se escucha.</p></details>
+        <details><summary>¿Qué foto debo enviar?</summary><p>Una foto nítida, con buena luz y con detalles: personas, lugares, colores. Las fotos muy oscuras o de un solo color se escanean peor.</p></details>
+        <details><summary>¿El video se puede ver muchas veces?</summary><p>Sí, cada vez que se apunte el celular a la foto de la caja.</p></details>
+        <details><summary>¿Cuánto se demora mi pedido?</summary><p>Escríbenos con tu fecha y te confirmamos la disponibilidad. En temporadas como Navidad y el Día de la Madre los cupos son limitados.</p></details>
+        <details><summary>¿Quién puede ver mi video?</summary><p>El enlace de tu video no aparece en esta página ni en nuestras redes: se abre con el QR de tu caja. Si prefieres, después de la entrega lo retiramos.</p></details>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <img src="assets/img/logo-horizontal-negativo.svg" alt="Mao details">
+  <p class="script">Recuerdos que cobran vida</p>
+  <p>Hecho a mano en <span class="js-ciudad">Bogotá</span> · <a id="ig-footer" href="#" target="_blank" rel="noopener">@mao.details</a></p>
+</footer>
+
+<script src="assets/js/config.js"></script>
+<script src="vendor/qrcode.js"></script>
+<script>
+  (function () {
+    var c = window.MAO_CONFIG || {};
+    var ig = "https://ig.me/m/" + (c.instagram || "mao.details");
+    document.getElementById("btn-instagram").href = ig;
+    document.getElementById("ig-footer").href = "https://instagram.com/" + (c.instagram || "mao.details");
+    document.getElementById("ig-footer").textContent = "@" + (c.instagram || "mao.details");
+    var wa = document.getElementById("btn-whatsapp");
+    if (c.whatsapp) { wa.href = "https://wa.me/" + c.whatsapp + "?text=" + encodeURIComponent(c.mensajeWhatsapp || ""); wa.hidden = false; }
+    document.querySelectorAll(".js-ciudad").forEach(function (e) { e.textContent = c.ciudad || "Bogotá"; });
+    document.querySelectorAll(".js-limite").forEach(function (e) { e.textContent = c.fechaLimiteNavidad || ""; });
+    // QR de la demo apuntando al visor en este mismo sitio
+    try {
+      var url = new URL("ver.html?p=demo", location.href).href;
+      var q = qrcode(0, "M"); q.addData(url); q.make();
+      document.getElementById("qr-demo").innerHTML = q.createSvgTag({ cellSize: 3, margin: 0, scalable: false });
+    } catch (e) { document.getElementById("qr-demo").remove(); }
+  })();
+</script>
+</body>
+</html>

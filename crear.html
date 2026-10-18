@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Crear pedido · Mao details (uso interno)</title>
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/css/estilos.css">
+<style>
+  body { background: var(--marfil); }
+  header { background: var(--vino); padding: 14px 0; }
+  header img { height: 40px; width: auto; }
+  main { padding: 40px 0 80px; }
+  .tarjeta { background: var(--blanco); border: 1px solid #eadfd3; padding: 28px; margin-bottom: 20px; }
+  .tarjeta h2 { font-size: 1.7rem; display: flex; gap: 12px; align-items: center; }
+  .tarjeta h2 .n { width: 34px; height: 34px; border-radius: 50%; background: var(--vino); color: var(--marfil); font: 600 .95rem/34px var(--sans); text-align: center; flex: none; }
+  label { display: block; font-weight: 600; font-size: .85rem; color: var(--vino); margin: 16px 0 6px; }
+  input[type=text], input[type=url], textarea { width: 100%; padding: 12px 14px; border: 1px solid #d8cabb; background: var(--marfil); font: inherit; border-radius: var(--radio); }
+  input[type=file] { font: inherit; }
+  .ayuda { font-size: .82rem; color: #6d5f62; margin: 6px 0 0; }
+  .fila { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media (max-width: 720px) { .fila { grid-template-columns: 1fr; } }
+  .vista { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 14px; }
+  .vista canvas, .vista video { width: 200px; height: 200px; object-fit: contain; background: #eee; border: 2px solid var(--dorado); }
+  .barra-progreso { height: 10px; background: #eee; border-radius: 99px; overflow: hidden; margin: 14px 0 6px; }
+  .barra-progreso div { height: 100%; width: 0; background: var(--dorado); transition: width .2s; }
+  .estado { font-size: .9rem; }
+  .ok { color: #2e7d32; } .mal { color: #b3261e; } .alerta { color: #a15c00; }
+  #resultado[hidden] { display: none; }
+  #qr { background: #fff; padding: 10px; display: inline-block; line-height: 0; border: 1px solid #eadfd3; }
+  code { background: var(--marfil); padding: 2px 6px; }
+  ol.pasos-subir li { margin-bottom: 6px; }
+</style>
+</head>
+<body>
+<header><div class="contenedor"><img src="assets/img/logo-horizontal-negativo.svg" alt="Mao details"></div></header>
+<main class="contenedor">
+  <p class="sobretitulo">Herramienta interna · no compartir este enlace</p>
+  <h1 style="font-size:2.6rem">Crear un <em>pedido</em></h1>
+  <p>Con la foto y el video del cliente, esta página prepara todo lo que necesita la caja: el archivo que reconoce la foto, el QR y la foto para imprimir. Todo se hace en tu navegador; nada se sube a ningún lado hasta que tú lo publiques.</p>
+
+  <div class="tarjeta">
+    <h2><span class="n">1</span>Datos del pedido</h2>
+    <div class="fila">
+      <div><label for="para">Para (nombre que verá al abrir)</label><input type="text" id="para" placeholder="Ej.: Laura"></div>
+      <div><label for="codigo">Código de la caja</label><input type="text" id="codigo" readonly><p class="ayuda">Se genera solo, al azar, para que nadie pueda adivinar el enlace.</p></div>
+    </div>
+    <label for="mensaje">Mensaje corto de bienvenida (opcional)</label>
+    <textarea id="mensaje" rows="2" placeholder="Ej.: Feliz aniversario, mi amor. Apunta a la foto."></textarea>
+    <label for="base">Dirección de la página</label>
+    <input type="url" id="base">
+    <p class="ayuda">Es la dirección donde está publicada la página (termina en /). Se usa para crear el QR.</p>
+  </div>
+
+  <div class="tarjeta">
+    <h2><span class="n">2</span>Foto y video</h2>
+    <div class="fila">
+      <div>
+        <label for="foto">Foto del cliente</label>
+        <input type="file" id="foto" accept="image/*">
+        <p class="ayuda">Se recorta en cuadrado, desde el centro. Esa misma foto es la que se imprime y se pega en la tapa.</p>
+      </div>
+      <div>
+        <label for="video">Video del cliente (mp4)</label>
+        <input type="file" id="video" accept="video/mp4,video/quicktime,video/*">
+        <p class="ayuda">Máximo 30 s. Lo ideal es que pese menos de 20 MB.</p>
+      </div>
+    </div>
+    <div class="vista"><canvas id="vista-foto" width="1000" height="1000"></canvas><video id="vista-video" muted playsinline controls></video></div>
+    <p class="estado" id="estado-archivos"></p>
+  </div>
+
+  <div class="tarjeta">
+    <h2><span class="n">3</span>Preparar</h2>
+    <button class="boton boton-vino" id="btn-crear" disabled>Preparar pedido</button>
+    <div class="barra-progreso"><div id="progreso"></div></div>
+    <p class="estado" id="estado"></p>
+  </div>
+
+  <div class="tarjeta" id="resultado" hidden>
+    <h2><span class="n">4</span>Listo: descarga y publica</h2>
+    <div class="fila">
+      <div>
+        <p><b>Enlace de la caja:</b><br><a id="enlace" target="_blank" rel="noopener"></a></p>
+        <div id="qr"></div>
+        <p class="ayuda">Este QR va en la tapa y en la tarjeta.</p>
+      </div>
+      <div>
+        <p><a class="boton boton-dorado" id="btn-zip" download>Descargar pedido (.zip)</a></p>
+        <p class="ayuda">Incluye la carpeta <code>pedidos/CÓDIGO</code>, la foto para imprimir a 12 × 12 cm y el QR en PNG.</p>
+        <ol class="pasos-subir">
+          <li>Descomprime el .zip.</li>
+          <li>En GitHub, entra a la carpeta <code>pedidos</code> y arrastra la carpeta del código. Toca <b>Commit changes</b>.</li>
+          <li>Espera 1 o 2 minutos y abre el enlace para probar.</li>
+          <li>Imprime <code>foto_12x12cm.jpg</code> en papel mate y pégala en la tapa.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script src="vendor/jszip.min.js"></script>
+<script src="vendor/qrcode.js"></script>
+<script type="module">
+import { Compiler } from "./vendor/mindar-image.prod.js";
+const $ = (id) => document.getElementById(id);
+const alfabeto = "abcdefghjkmnpqrstuvwxyz23456789";
+const nuevoCodigo = () => Array.from(crypto.getRandomValues(new Uint8Array(8)), b => alfabeto[b % alfabeto.length]).join("");
+$("codigo").value = nuevoCodigo();
+$("base").value = new URL("./", location.href).href;
+
+let fotoListo = false, videoArchivo = null;
+const cv = $("vista-foto"), ctx = cv.getContext("2d");
+
+$("foto").onchange = async (e) => {
+  const f = e.target.files[0]; if (!f) return;
+  const img = await crearImagen(URL.createObjectURL(f));
+  const lado = Math.min(img.naturalWidth, img.naturalHeight);
+  const sx = (img.naturalWidth - lado) / 2, sy = (img.naturalHeight - lado) / 2;
+  ctx.drawImage(img, sx, sy, lado, lado, 0, 0, 1000, 1000);
+  fotoListo = true;
+  avisos(lado < 900 ? `<span class="alerta">La foto es pequeña (${lado}px). Se puede imprimir borrosa; pide una más grande si puedes.</span>` : `<span class="ok">Foto lista (${lado}px).</span>`);
+  revisar();
+};
+$("video").onchange = (e) => {
+  const f = e.target.files[0]; if (!f) return;
+  videoArchivo = f; const v = $("vista-video"); v.src = URL.createObjectURL(f);
+  v.onloadedmetadata = () => {
+    const mb = f.size / 1048576;
+    let msg = `Video: ${v.duration.toFixed(0)} s · ${mb.toFixed(1)} MB.`;
+    if (mb > 24) msg = `<span class="mal">${msg} Pesa más de 24 MB: GitHub no lo acepta desde la web. Comprímelo (por ejemplo, exportándolo en 720p).</span>`;
+    else if (v.duration > 35) msg = `<span class="alerta">${msg} Es largo; lo ideal son 30 s o menos.</span>`;
+    else msg = `<span class="ok">${msg}</span>`;
+    avisos(null, msg);
+  };
+  revisar();
+};
+let avF = "", avV = "";
+function avisos(f, v) { if (f) avF = f; if (v) avV = v; $("estado-archivos").innerHTML = [avF, avV].filter(Boolean).join("<br>"); }
+function revisar() { $("btn-crear").disabled = !(fotoListo && videoArchivo); }
+function crearImagen(src) { return new Promise((ok, mal) => { const i = new Image(); i.onload = () => ok(i); i.onerror = mal; i.src = src; }); }
+const aBlob = (c, tipo, q) => new Promise(r => c.toBlob(r, tipo, q));
+
+$("btn-crear").onclick = async () => {
+  $("btn-crear").disabled = true; $("estado").textContent = "Analizando la foto… (puede tardar 20–60 segundos)";
+  try {
+    const codigo = $("codigo").value;
+    const img = await crearImagen(cv.toDataURL("image/jpeg", 0.95));
+    const compiler = new Compiler();
+    await compiler.compileImageTargets([img], (p) => { $("progreso").style.width = p.toFixed(0) + "%"; });
+    const mind = await compiler.exportData();
+
+    // Foto para imprimir: 12 cm a 300 dpi = 1417 px
+    const imp = document.createElement("canvas"); imp.width = imp.height = 1417;
+    imp.getContext("2d").drawImage(cv, 0, 0, 1417, 1417);
+    const fotoImp = await aBlob(imp, "image/jpeg", 0.95);
+    const fotoWeb = await aBlob(cv, "image/jpeg", 0.88);
+
+    const ext = (videoArchivo.name.split(".").pop() || "mp4").toLowerCase();
+    const nombreVideo = "video." + (ext === "mov" ? "mov" : "mp4");
+    const config = { para: $("para").value.trim(), mensaje: $("mensaje").value.trim(), video: nombreVideo, target: "target.mind", creado: new Date().toLocaleDateString("sv") };
+
+    const url = $("base").value.replace(/\/?$/, "/") + "ver.html?p=" + codigo;
+    const q = qrcode(0, "M"); q.addData(url); q.make();
+    $("qr").innerHTML = q.createSvgTag({ cellSize: 5, margin: 2 });
+    const qrCanvas = document.createElement("canvas"); const n = q.getModuleCount(), cel = 20, m = 2;
+    qrCanvas.width = qrCanvas.height = (n + m * 2) * cel; const qc = qrCanvas.getContext("2d");
+    qc.fillStyle = "#fff"; qc.fillRect(0, 0, qrCanvas.width, qrCanvas.height); qc.fillStyle = "#4A1420";
+    for (let r = 0; r < n; r++) for (let c = 0; c < n; c++) if (q.isDark(r, c)) qc.fillRect((c + m) * cel, (r + m) * cel, cel, cel);
+    const qrPng = await aBlob(qrCanvas, "image/png");
+
+    const zip = new JSZip();
+    const dir = zip.folder("pedidos").folder(codigo);
+    dir.file("config.json", JSON.stringify(config, null, 2));
+    dir.file("target.mind", mind);
+    dir.file(nombreVideo, videoArchivo);
+    dir.file("foto.jpg", fotoWeb);
+    zip.file(`IMPRIMIR_foto_12x12cm_${codigo}.jpg`, fotoImp);
+    zip.file(`QR_${codigo}.png`, qrPng);
+    zip.file("LEEME.txt", `Pedido ${codigo}\nPara: ${config.para}\nEnlace: ${url}\n\n1) Sube la carpeta pedidos/${codigo} a la carpeta pedidos del repositorio.\n2) Imprime la foto a 12 x 12 cm en papel mate.\n3) Pon el QR en la tapa y la tarjeta.\n4) Prueba el enlace antes de entregar.\n`);
+    const blob = await zip.generateAsync({ type: "blob" });
+    $("btn-zip").href = URL.createObjectURL(blob); $("btn-zip").download = `pedido_${codigo}.zip`;
+    $("enlace").href = url; $("enlace").textContent = url;
+    $("resultado").hidden = false; $("estado").innerHTML = '<span class="ok">Pedido preparado.</span>';
+    $("resultado").scrollIntoView({ behavior: "smooth" });
+  } catch (err) {
+    console.error(err);
+    $("estado").innerHTML = `<span class="mal">No se pudo preparar: ${err.message || err}. Prueba con Chrome en computador.</span>`;
+    $("btn-crear").disabled = false;
+  }
+};
+</script>
+</body>
+</html>
