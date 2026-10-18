@@ -1,0 +1,1 @@
+# maodetails.github.io
